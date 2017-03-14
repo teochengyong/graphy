@@ -6,6 +6,26 @@ const fixtures = [
         'label': 'D3 should be present',
         'input': '',
         'expected': D3
+    },
+    {
+        'label': 'Expect draw function to be present',
+        'input': 'draw',
+        'expected': true
+    },
+    {
+        'label': 'Expect to draw a bar chart',
+        'input': ['bar', {}],
+        'expected': true
+    },
+    {
+        'label': 'Expect to draw a line chart',
+        'input': ['line', {}],
+        'expected': true
+    },
+    {
+        'label': 'Expect to draw a pie chart',
+        'input': ['pie', {}],
+        'expected': true
     }
 ]
 
