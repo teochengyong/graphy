@@ -1,0 +1,9 @@
+* text=auto
+
+*.js eol=lf
+*.css eol=lf
+*.html eol=lf
+*.md eol=lf
+*.gitattributes eol=lf
+*.gitignore eol=lf
+*.package.json eol=lf
