@@ -11,19 +11,27 @@
     if(has_require) {
       d3 = require('d3')
     } else throw new Error('Viz requires d3, see `"https://d3js.org/`"')
-
   }
-
 
 
   const Viz = function Viz() {}
 
+  Viz.prototype.d3 = d3
   Viz.prototype.noConflict = function () {
     root.Viz = previous
     return Viz
   }
 
-  Viz.prototype.d3 = d3
+  Viz.prototype.draw = function (type, options) {
+    return
+  }
+
+  Viz.prototype.transform = function (data, options) {
+    return
+  }
+
+
+
 
   if(typeof exports !== 'undefined') {
     if( typeof module !== 'undefined' && module.exports) {
