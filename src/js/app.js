@@ -20,24 +20,46 @@
   const width = 420
   const barHeight = 20
   let x = window.d3.scaleLinear()
-          .domain([0, window.d3.max(barData)])
           .range([0, width])
 
   let chart = window.d3.select('.chart')
         .attr('width', width)
-        .attr('height', barHeight * barData.length)
-  let bar = chart
-        .selectAll('g')
-        .data(barData)
-        .enter().append('g')
-        .attr('transform', function (d, i) { return `translate(0,` + i * barHeight + `)` })
-  bar.append('rect')
-      .attr('width', x)
-      .attr('height', barHeight - 1)
 
-  bar.append('text')
-      .attr('x', function (d) { return x(d) - 3 })
-      .attr('y', barHeight / 2)
-      .attr('dy', '.35em')
-      .text(function (d) { return d })
+  window.d3.tsv('data/postcodes.data', type, function (error, data) {
+    if (!error) {
+      x.domain([0, window.d3.max(data, function (d) {
+        return +d.postcode
+      })])
+      chart.attr('height', barHeight * data.length)
+      let bar = chart
+            .selectAll('g')
+            .data(data)
+            .enter().append('g')
+            .attr('transform', function (d, i) {
+              return `translate(0,` + i * barHeight + `)`
+            })
+      bar.append('rect')
+          .attr('width', function (d) {
+            return x(+d.postcode)
+          })
+          .attr('height', barHeight - 1)
+
+      bar.append('text')
+          .attr('x', function (d) {
+            return x(+d.postcode) - 3
+          })
+          .attr('y', barHeight / 2)
+          .attr('dy', '.35em')
+          .text(function (d) {
+            return d.postcode
+          })
+    } else {
+      throw error
+    }
+  })
+
+  function type (d) {
+    d.value = +d.value // coerce to number
+    return d
+  }
 })(window)
