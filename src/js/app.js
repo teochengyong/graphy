@@ -16,42 +16,43 @@
       fr.readAsText(e.target.files[0], 'UTF-8')
     }
   }, false)
-  const barData = [4, 8, 15, 16, 23, 42]
-  const width = 420
-  const barHeight = 20
-  let x = window.d3.scaleLinear()
-          .range([0, width])
+  const height = 500
+  const width = 1080
+  let y = window.d3.scaleLinear()
+          .range([height, 0])
 
   let chart = window.d3.select('.chart')
         .attr('width', width)
+        .attr('height', height)
 
-  window.d3.tsv('data/postcodes.data', type, function (error, data) {
+  window.d3.tsv('data/data.tsv', type, function (error, data) {
     if (!error) {
-      x.domain([0, window.d3.max(data, function (d) {
-        return +d.postcode
+      y.domain([0, window.d3.max(data, function (d) {
+        return +d.value
       })])
-      chart.attr('height', barHeight * data.length)
+      let barWidth = width / data.length
       let bar = chart
             .selectAll('g')
             .data(data)
             .enter().append('g')
             .attr('transform', function (d, i) {
-              return `translate(0,` + i * barHeight + `)`
+              return `translate(` + i * barWidth + `, 0)`
             })
       bar.append('rect')
-          .attr('width', function (d) {
-            return x(+d.postcode)
+          .attr('y', function (d) {
+            return y(+d.value)
           })
-          .attr('height', barHeight - 1)
+          .attr('height', function (d) { return height - y(+d.value) }) // origin of y is on the top left
+          .attr('width', barWidth - 1)
 
       bar.append('text')
-          .attr('x', function (d) {
-            return x(+d.postcode) - 3
+          .attr('y', function (d) {
+            return y(+d.value) + 3
           })
-          .attr('y', barHeight / 2)
-          .attr('dy', '.35em')
+          .attr('x', barWidth / 2)
+          .attr('dy', '.75em')
           .text(function (d) {
-            return d.postcode
+            return d.value
           })
     } else {
       throw error
